@@ -1,1 +1,43 @@
+name: MLOps Pipeline
 
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      push_to_hub:
+        description: 'Push model to Hugging Face Hub'
+        type: boolean
+        default: false
+      hf_repo:
+        description: 'Hugging Face repo id (e.g. your-username/distilbert-reviews-genres)'
+        type: string
+        default: ''
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t mlops .
+
+      - name: Run full pipeline
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.push_to_hub }}" = "true" ] && [ -n "${{ inputs.hf_repo }}" ]; then
+            ARGS="--push-to-hub --repo ${{ inputs.hf_repo }}"
+          fi
+          docker run --rm -e HF_TOKEN="${HF_TOKEN}" -e WANDB_API_KEY="${WANDB_API_KEY}" mlops $ARGS
+
+      - name: Upload eval results
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval_results/
+          retention-days: 30
