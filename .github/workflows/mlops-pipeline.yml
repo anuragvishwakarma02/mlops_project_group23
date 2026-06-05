@@ -20,7 +20,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      
+      - name: Debug - list repo root
+        run: ls -la
+        
       - name: Build Docker image
         run: docker build -t mlops .
 
