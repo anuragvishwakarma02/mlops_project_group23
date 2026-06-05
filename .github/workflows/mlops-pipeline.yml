@@ -8,11 +8,11 @@ on:
       push_to_hub:
         description: 'Push model to Hugging Face Hub'
         type: boolean
-        default: false
+        default: true
       hf_repo:
         description: 'Hugging Face repo id (e.g. your-username/distilbert-reviews-genres)'
         type: string
-        default: ''
+        default: 'anuragvishwakarma02/test'
 
 jobs:
   pipeline:
