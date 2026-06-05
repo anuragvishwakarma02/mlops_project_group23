@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 COPY src ./src
-COPY id2label.json ./id2label.json
+# COPY id2label.json ./id2label.json
 
 ENTRYPOINT ["python", "src/main.py"]
 
