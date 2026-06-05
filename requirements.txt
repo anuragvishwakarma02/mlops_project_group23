@@ -1,1 +1,23 @@
 
+torch>=2.2.0
+transformers>=4.40.0
+datasets>=2.19.0
+accelerate>=0.29.0
+safetensors>=0.4.0
+huggingface-hub>=0.22.0
+
+# Training / evaluation
+scikit-learn>=1.4.0
+
+
+# Data / HTTP
+requests>=2.31.0
+certifi>=2024.2.2
+pandas>=2.2.0
+
+# Experiment tracking
+wandb>=0.17.0
+
+# Visualisation
+matplotlib>=3.8.0
+seaborn>=0.13.0
