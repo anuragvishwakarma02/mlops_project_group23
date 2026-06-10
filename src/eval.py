@@ -1,203 +1,241 @@
-
-"""
-eval.py — Evaluation, metrics, and result artefacts.
-
-Run:
-    python eval.py
-
-Expects:
-    processed_genre_reviews_dict.pickle          — produced by data.py
-    distilbert-reviews-genres/     — produced by train.py
-
-Outputs:
-    eval_results/classification_report.txt
-    eval_results/confusion_heatmap.png
-    eval_results/misclassification_heatmap.png
-"""
+"""Evaluate token-classification model and produce reports."""
 
 import json
 import os
 import pickle
-from collections import defaultdict
 
 import matplotlib
-matplotlib.use('Agg')  # non-interactive backend; must be set before pyplot import
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import pandas as pd
+import numpy as np
 import seaborn as sns
 import wandb
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score, f1_score
-from transformers import (
-    DistilBertForSequenceClassification,
-    Trainer,
-    TrainingArguments,
-)
-import torch
+from sklearn.metrics import classification_report, confusion_matrix
+from transformers import AutoModelForTokenClassification, AutoTokenizer, DataCollatorForTokenClassification, Trainer, TrainingArguments
 
 from config import (
-    PROCESSED_DATA_FILE, CACHED_MODEL_DIR, DEVICE_NAME, EVAL_OUTPUT_DIR,
-    WANDB_PROJECT, WANDB_RUN_NAME,
+    DEVICE_NAME,
+    ENABLE_WANDB,
+    EVAL_OUTPUT_DIR,
+    LOCAL_MODEL_DIR,
+    PROCESSED_DATA_FILE,
+    TOP_K_CONFUSION,
+    WANDB_PROJECT,
+    WANDB_RUN_NAME,
 )
-from utils import MyDataset, compute_metrics
+from utils import resolve_device
 from wandb_utils import init_wandb_run
 
+
 def log(message):
-    """Print a friendly status message for the evaluation stage."""
     print(f"[eval] {message}")
 
 
-def run_baseline(train_texts, train_labels, test_texts, test_labels):
-    """TF-IDF + Logistic Regression baseline for comparison."""
-    log("Running baseline: TF-IDF + Logistic Regression")
-    vectorizer = TfidfVectorizer()
-    X_train = vectorizer.fit_transform(train_texts)
-    X_test  = vectorizer.transform(test_texts)
-    lr_model = LogisticRegression(max_iter=1000).fit(X_train, train_labels)
-    preds = lr_model.predict(X_test)
-    print(classification_report(test_labels, preds))
-    return preds
+def flatten_valid_labels(pred_ids, true_ids):
+    flat_true = []
+    flat_pred = []
+    for pred_seq, true_seq in zip(pred_ids, true_ids):
+        for pred, true in zip(pred_seq, true_seq):
+            if true != -100:
+                flat_true.append(int(true))
+                flat_pred.append(int(pred))
+    return flat_true, flat_pred
 
 
-def predict_with_bert(model, test_dataset, id2label):
-    """
-    Run HuggingFace Trainer predict and map integer ids back to label strings.
-    Also returns the raw eval metrics dict.
-    """
-    training_args = TrainingArguments(
-        output_dir='./results',
-        per_device_eval_batch_size=16,
-        report_to=[],
+def save_reports(flat_true, flat_pred, label_list, output_dir):
+    target_names = [str(lbl) for lbl in label_list]
+    report_text = classification_report(
+        flat_true,
+        flat_pred,
+        labels=list(range(len(label_list))),
+        target_names=target_names,
+        zero_division=0,
+        digits=4,
     )
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        compute_metrics=compute_metrics,
+    report_dict = classification_report(
+        flat_true,
+        flat_pred,
+        labels=list(range(len(label_list))),
+        target_names=target_names,
+        zero_division=0,
+        output_dict=True,
     )
 
-    log("Running Hugging Face evaluation loop")
-    eval_results = trainer.evaluate(test_dataset)
-    log(f"Evaluation metrics: {eval_results}")
+    txt_path = os.path.join(output_dir, "classification_report.txt")
+    json_path = os.path.join(output_dir, "classification_report.json")
 
-    predicted = trainer.predict(test_dataset)
-    label_ids = predicted.predictions.argmax(-1).flatten().tolist()
-    predicted_labels = [id2label[i] for i in label_ids]
-    return predicted_labels, eval_results
-
-
-def save_report(test_labels, predicted_labels, output_dir):
-    """Print, save, and return the sklearn classification report as a dict."""
-    report_str  = classification_report(test_labels, predicted_labels)
-    report_dict = classification_report(test_labels, predicted_labels, output_dict=True)
-    log("BERT classification report:")
-    print(report_str)
-
-    txt_path  = os.path.join(output_dir, 'classification_report.txt')
-    json_path = os.path.join(output_dir, 'classification_report.json')
-    with open(txt_path, 'w') as f:
-        f.write(report_str)
-    with open(json_path, 'w') as f:
+    with open(txt_path, "w", encoding="utf-8") as f:
+        f.write(report_text)
+    with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report_dict, f, indent=2)
-    log(f"Saved classification report to {txt_path} and {json_path}")
+
+    log("Saved classification report")
+    log("\n" + "=" * 70)
+    log("TOKEN-LEVEL CLASSIFICATION REPORT")
+    log("=" * 70)
+    log(report_text)
     return report_dict
 
 
-def save_heatmap(test_labels, predicted_labels, output_dir, exclude_diagonal=False):
-    """Save a seaborn heatmap of genre classifications (or misclassifications)."""
-    counts = defaultdict(int)
-    for true, pred in zip(test_labels, predicted_labels):
-        if not (exclude_diagonal and true == pred):
-            counts[(true, pred)] += 1
+def save_confusion(flat_true, flat_pred, label_list, label2id, output_dir):
+    all_label_ids = list(range(len(label_list)))
+    all_cm = confusion_matrix(flat_true, flat_pred, labels=all_label_ids)
 
-    rows = [
-        {'True Genre': t, 'Predicted Genre': p, 'Number of Classifications': c}
-        for (t, p), c in counts.items()
-    ]
-    df_wide = pd.DataFrame(rows).pivot_table(
-        index='True Genre',
-        columns='Predicted Genre',
-        values='Number of Classifications',
+    label_support = all_cm.sum(axis=1)
+    o_id = label2id.get("O", None)
+
+    entity_ids = [idx for idx in all_label_ids if idx != o_id and label_support[idx] > 0]
+    entity_ids = sorted(entity_ids, key=lambda idx: label_support[idx], reverse=True)
+    selected_ids = entity_ids[:TOP_K_CONFUSION]
+
+    if o_id is not None and label_support[o_id] > 0:
+        selected_ids = [o_id] + selected_ids
+
+    if not selected_ids:
+        selected_ids = [idx for idx in all_label_ids if label_support[idx] > 0][:TOP_K_CONFUSION]
+
+    cm = confusion_matrix(flat_true, flat_pred, labels=selected_ids)
+    selected_names = [label_list[idx] for idx in selected_ids]
+
+    row_sums = cm.sum(axis=1, keepdims=True)
+    cm_norm = np.divide(cm, row_sums, where=row_sums != 0)
+
+    fig_w = max(12, min(24, int(0.5 * len(selected_names)) + 8))
+    fig_h = max(8, min(20, int(0.5 * len(selected_names)) + 6))
+
+    fig, axes = plt.subplots(1, 2, figsize=(fig_w, fig_h), constrained_layout=True)
+
+    sns.heatmap(
+        cm,
+        ax=axes[0],
+        cmap="Blues",
+        xticklabels=selected_names,
+        yticklabels=selected_names,
+        linewidths=0.2,
+        linecolor="gray",
     )
+    axes[0].set_title(f"Token-level Confusion Matrix (top {len(selected_names)} labels)")
+    axes[0].set_xlabel("Predicted label")
+    axes[0].set_ylabel("True label")
+    axes[0].tick_params(axis="x", rotation=90)
 
-    plt.figure(figsize=(9, 7))
-    sns.set(style='ticks', font_scale=1.2)
-    sns.heatmap(df_wide, linewidths=1, cmap='Purples')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
+    sns.heatmap(
+        cm_norm,
+        ax=axes[1],
+        cmap="magma",
+        vmin=0,
+        vmax=1,
+        xticklabels=selected_names,
+        yticklabels=selected_names,
+        linewidths=0.2,
+        linecolor="gray",
+    )
+    axes[1].set_title("Row-normalized Confusion Matrix")
+    axes[1].set_xlabel("Predicted label")
+    axes[1].set_ylabel("True label")
+    axes[1].tick_params(axis="x", rotation=90)
 
-    fname = 'misclassification_heatmap.png' if exclude_diagonal else 'confusion_heatmap.png'
-    path = os.path.join(output_dir, fname)
-    plt.savefig(path)
-    plt.close()
-    log(f"Saved heatmap to {path}")
+    out_path = os.path.join(output_dir, "confusion_matrices.png")
+    plt.savefig(out_path)
+    plt.close(fig)
+    log(f"Saved confusion matrix figure: {out_path}")
 
-
-# ---------------------------------------------------------------------------
-# Entry point
-# ---------------------------------------------------------------------------
 
 def main():
+    if not os.path.exists(PROCESSED_DATA_FILE):
+        raise FileNotFoundError(
+            f"Processed data file not found: {PROCESSED_DATA_FILE}. Run data.py first."
+        )
+
+    if not os.path.exists(LOCAL_MODEL_DIR):
+        raise FileNotFoundError(
+            f"Model directory not found: {LOCAL_MODEL_DIR}. Run train.py first."
+        )
+
     os.makedirs(EVAL_OUTPUT_DIR, exist_ok=True)
-    log("Starting evaluation and metrics logging")
 
-    wandb_enabled = init_wandb_run(
-        project=WANDB_PROJECT,
-        name=f'{WANDB_RUN_NAME}-eval',
-        resume='allow',
-    )
-    if wandb_enabled:
-        log("Using WANDB_API_KEY from environment for tracking")
-    else:
-        log("WANDB_API_KEY not set; W&B tracking disabled")
-
-    log(f"Loading processed dataset from {PROCESSED_DATA_FILE}")
-    with open(PROCESSED_DATA_FILE, 'rb') as f:
+    with open(PROCESSED_DATA_FILE, "rb") as f:
         data = pickle.load(f)
 
-    test_dataset = MyDataset(data['test_encodings'], data['test_labels_encoded'])
-    test_labels  = data['test_labels']
-    id2label     = data['id2label']
+    tokenized_dataset = data["tokenized_dataset"]
+    label_list = data["label_list"]
+    label2id = data["label2id"]
+    eval_split = data["eval_split"]
 
-    # Baseline
-    run_baseline(
-        data['train_texts'], data['train_labels'],
-        data['test_texts'],  test_labels,
+    device = resolve_device(DEVICE_NAME)
+    log(f"Using device: {device}")
+
+    model = AutoModelForTokenClassification.from_pretrained(LOCAL_MODEL_DIR).to(device)
+    tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL_DIR)
+    data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
+
+    trainer = Trainer(
+        model=model,
+        args=TrainingArguments(output_dir=EVAL_OUTPUT_DIR, report_to=[]),
+        data_collator=data_collator,
     )
 
-    log("Checking GPU availability:")
-    DEVICE= DEVICE_NAME['cuda'] if torch.cuda.is_available() else DEVICE_NAME['mps'] if torch.backends.mps.is_available() else DEVICE_NAME['cpu']
-    log(f" Using device : {DEVICE}")
+    eval_results = trainer.evaluate(tokenized_dataset[eval_split])
 
-    # Load fine-tuned model and predict
-    log(f"Loading fine-tuned model from {CACHED_MODEL_DIR}")
-    model = DistilBertForSequenceClassification.from_pretrained(CACHED_MODEL_DIR).to(DEVICE)
+    # Print Trainer eval metrics summary
+    log("\n" + "=" * 70)
+    log("TRAINER EVALUATION METRICS")
+    log("=" * 70)
+    for key, val in sorted(eval_results.items()):
+        if isinstance(val, float):
+            log(f"  {key:<40} {val:.4f}")
+        else:
+            log(f"  {key:<40} {val}")
+    log("=" * 70)
 
-    predicted_labels, eval_results = predict_with_bert(model, test_dataset, id2label)
+    pred_output = trainer.predict(tokenized_dataset[eval_split])
+    pred_ids = np.argmax(pred_output.predictions, axis=2)
+    true_ids = pred_output.label_ids
 
-    # Save results
-    save_report(test_labels, predicted_labels, EVAL_OUTPUT_DIR)
-    save_heatmap(test_labels, predicted_labels, EVAL_OUTPUT_DIR, exclude_diagonal=False)
-    save_heatmap(test_labels, predicted_labels, EVAL_OUTPUT_DIR, exclude_diagonal=True)
+    flat_true, flat_pred = flatten_valid_labels(pred_ids, true_ids)
+    report_dict = save_reports(flat_true, flat_pred, label_list, EVAL_OUTPUT_DIR)
+    save_confusion(flat_true, flat_pred, label_list, label2id, EVAL_OUTPUT_DIR)
 
-    # Log final metrics to W&B
-    wandb.log({
-        'final/loss':     eval_results.get('eval_loss', None),
-        'final/accuracy': accuracy_score(test_labels, predicted_labels),
-        'final/f1':       f1_score(test_labels, predicted_labels, average='weighted'),
-    })
+    # Print summary metrics to console
+    for avg_key in ("macro avg", "weighted avg"):
+        if avg_key in report_dict:
+            m = report_dict[avg_key]
+            log(f"{avg_key} — precision: {m['precision']:.4f} | recall: {m['recall']:.4f} | f1: {m['f1-score']:.4f} | support: {int(m['support'])}")
 
-    # Upload classification report as a versioned W&B Artifact
-    artifact = wandb.Artifact('eval-report', type='evaluation')
-    artifact.add_file(os.path.join(EVAL_OUTPUT_DIR, 'classification_report.json'))
-    artifact.add_file(os.path.join(EVAL_OUTPUT_DIR, 'classification_report.txt'))
-    artifact.add_file(os.path.join(EVAL_OUTPUT_DIR, 'confusion_heatmap.png'))
-    artifact.add_file(os.path.join(EVAL_OUTPUT_DIR, 'misclassification_heatmap.png'))
-    wandb.log_artifact(artifact)
+    if ENABLE_WANDB:
+        wandb_enabled = init_wandb_run(
+            project=WANDB_PROJECT,
+            name=f"{WANDB_RUN_NAME}-eval",
+            resume="allow",
+        )
+        if wandb_enabled:
+            # 1. Trainer metrics (eval_loss, runtime, etc.)
+            wandb.log({f"final/{k}": v for k, v in eval_results.items() if isinstance(v, (int, float))})
 
-    wandb.finish()
-    log(f"All evaluation artifacts saved to {EVAL_OUTPUT_DIR}/")
+            # 2. Summary metrics (macro avg / weighted avg / accuracy)
+            for avg_key in ("macro avg", "weighted avg", "accuracy"):
+                if avg_key in report_dict:
+                    m = report_dict[avg_key]
+                    if isinstance(m, dict):
+                        wandb.log({
+                            f"final/{avg_key}/precision": m.get("precision", 0),
+                            f"final/{avg_key}/recall": m.get("recall", 0),
+                            f"final/{avg_key}/f1": m.get("f1-score", 0),
+                        })
+                    else:
+                        wandb.log({f"final/{avg_key}": m})
+
+            # 3. Artifacts
+            artifact = wandb.Artifact("eval-report", type="evaluation")
+            artifact.add_file(os.path.join(EVAL_OUTPUT_DIR, "classification_report.json"))
+            artifact.add_file(os.path.join(EVAL_OUTPUT_DIR, "classification_report.txt"))
+            artifact.add_file(os.path.join(EVAL_OUTPUT_DIR, "confusion_matrices.png"))
+            wandb.log_artifact(artifact)
+            wandb.finish()
+
+    log(f"All evaluation artifacts saved to {EVAL_OUTPUT_DIR}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
