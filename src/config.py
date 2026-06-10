@@ -1,88 +1,76 @@
+"""Central configuration for the NER pipeline."""
 
-"""
-config.py — Central configuration for all pipeline stages.
-Edit this file to change model, data, training, or evaluation settings.
-"""
+import os
+from datetime import datetime
 
-# Model
-MODEL_NAME   = 'distilbert-base-cased'
-# Choose device: 'mps' for Apple Silicon, 'cuda' for NVIDIA GPU, 'cpu' for local fallback.
-DEVICE_NAME={
-    'mps': 'mps',
-    'cuda': 'cuda',
-    'cpu': 'cpu',
+import dotenv
+dotenv.load_dotenv()
+
+
+def _as_bool(value: str, default: bool) -> bool:
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+SEED = int(os.getenv("SEED", "42"))
+
+models={
+    '0': 'dslim/bert-base-NER',
+    '1': 'elastic/distilbert-base-uncased-finetuned-conll03-english',
+    '2': 'microsoft/deberta-v3-base'
+}
+MODEL_NAME = os.getenv("MODEL_NAME", models.get('0'))
+MAX_LENGTH = int(os.getenv("MAX_LENGTH", "256"))
+
+DATASET_NAME = os.getenv("DATASET_NAME", "yongsun-yoon/open-ner-english")
+
+DEVICE_NAME = {
+    "mps": "mps",
+    "cuda": "cuda",
+    "cpu": "cpu",
 }
 
-# = 'mps'
-# # DEVICE_NAME  = 'cuda'
-# # DEVICE_NAME  = 'cpu' 
+ARTIFACTS_DIR = os.getenv("ARTIFACTS_DIR", "./artifacts")
+OUTPUT_DIR = os.getenv("OUTPUT_DIR", "./ner_results")
+LOCAL_MODEL_DIR = os.getenv("LOCAL_MODEL_DIR", f"./models/{MODEL_NAME.replace('/', '-')}")
+EVAL_OUTPUT_DIR = os.path.join(ARTIFACTS_DIR, "eval_results")
 
-# File paths
-ARTIFACTS_DIR       = './artifacts/'
-RAW_DATA_FILE       = ARTIFACTS_DIR+'raw_data_dict.pickle'
-PROCESSED_DATA_FILE = ARTIFACTS_DIR+'processed_data_dict.pickle'
-ID2LABEL_FILE       = ARTIFACTS_DIR+'id2label.json'
-CACHED_MODEL_DIR    = ARTIFACTS_DIR+'model_cache'
-# EVAL_OUTPUT_DIR     = './eval_results'
-EVAL_OUTPUT_DIR     = ARTIFACTS_DIR+'eval_results'  # Save eval results inside model cache for easier access
+DATASET_PICKLE_PATH = os.getenv("DATASET_PICKLE_PATH", os.path.join(ARTIFACTS_DIR, "open_ner_english_dataset.pkl"))
+CLEANED_DATASET_PICKLE_PATH = os.getenv("CLEANED_DATASET_PICKLE_PATH", os.path.join(ARTIFACTS_DIR, "open_ner_english_cleaned.pkl"))
+PROCESSED_DATA_FILE = os.getenv("PROCESSED_DATA_FILE", os.path.join(ARTIFACTS_DIR, "processed_ner_data.pkl"))
 
+ID2LABEL_FILE = os.getenv("ID2LABEL_FILE", os.path.join(ARTIFACTS_DIR, "id2label.json"))
 
+USE_SUBSET = _as_bool(os.getenv("USE_SUBSET", "true"), True)
+TRAIN_MAX_SAMPLES = int(os.getenv("TRAIN_MAX_SAMPLES", "5000"))
+VALIDATION_MAX_SAMPLES = int(os.getenv("VALIDATION_MAX_SAMPLES", "1000"))
 
-# Data loading and sampling settings
-MAX_LENGTH        = 512    # maximum token length for DistilBERT
-HEAD              = 10000  # upper bound per genre stream before sampling
-SAMPLE_SIZE       = 200   # random sample per genre after reading
-REVIEWS_PER_GENRE = 1000   # final reviews per genre for train+test split
-TRAIN_RATIO       = 0.8
+MAX_ENTITY_TYPES = int(os.getenv("MAX_ENTITY_TYPES", "500"))
+RARE_ENTITY_POLICY = os.getenv("RARE_ENTITY_POLICY", "O").upper()
+TOP_K_CONFUSION = int(os.getenv("TOP_K_CONFUSION", "15"))
 
-GENRE_URL_DICT = {
-    'poetry':                 
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_poetry.json.gz',
-    
-    'children':               
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_children.json.gz',
-    
-    'comics_graphic':
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_comics_graphic.json.gz',
-    
-    'fantasy_paranormal':
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_fantasy_paranormal.json.gz',
-    
-    'history_biography':
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_history_biography.json.gz',
-    
-    'mystery_thriller_crime': 
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_mystery_thriller_crime.json.gz',
-    
-    'romance':                
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_romance.json.gz',
-    
-    'young_adult':            
-        'https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_young_adult.json.gz',
-}
+ENABLE_WANDB = _as_bool(os.getenv("ENABLE_WANDB", "true"), True)
+WANDB_PROJECT = os.getenv("WANDB_PROJECT", "mlops-group-23-project")
+WANDB_RUN_NAME = os.getenv("WANDB_RUN_NAME", f"ner-fine-tune-run-{MODEL_NAME.replace('/', '-')}")
+WANDB_RUN_NAME = f"{WANDB_RUN_NAME}-{MODEL_NAME.replace('/', '-')}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 
-
-# Weights & Biases
-
-WANDB_PROJECT  = 'mlops-group23-project'
-WANDB_RUN_NAME = 'run-1'
-
-
-# Training
+HF_TOKEN = os.getenv("HF_TOKEN")
+HF_REPO = os.getenv("HF_REPO", "anuragvishwakarma02/mlops-group23-ner")
 
 TRAINING_ARGS = dict(
-    num_train_epochs=3,
-    per_device_train_batch_size=10,
-    per_device_eval_batch_size=16,
-    learning_rate=5e-5,
-    warmup_steps=100,
-    weight_decay=0.01,
-    output_dir='./results',
-    logging_dir='./logs',
-    logging_steps=50,
-    eval_strategy='epoch',
-    save_strategy='epoch',
+    output_dir=OUTPUT_DIR,
+    learning_rate=float(os.getenv("LEARNING_RATE", "5e-5")),
+    per_device_train_batch_size=int(os.getenv("TRAIN_BATCH_SIZE", "16")),
+    per_device_eval_batch_size=int(os.getenv("EVAL_BATCH_SIZE", "16")),
+    num_train_epochs=float(os.getenv("NUM_TRAIN_EPOCHS", "5")),
+    weight_decay=float(os.getenv("WEIGHT_DECAY", "0.01")),
+    eval_strategy="epoch",
+    save_strategy="epoch",
+    logging_strategy="steps",
+    logging_steps=int(os.getenv("LOGGING_STEPS", "50")),
     load_best_model_at_end=True,
-    report_to='wandb',
-    run_name=WANDB_RUN_NAME,
+    metric_for_best_model="f1",
+    push_to_hub=False,
+    seed=SEED,
 )
