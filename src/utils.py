@@ -1,44 +1,65 @@
 """Shared helpers used by training and evaluation modules."""
 
+"""Shared helpers for the NER pipeline."""
+
+import random
+
+import numpy as np
 import torch
-from sklearn.metrics import accuracy_score, f1_score
 
 
-class MyDataset(torch.utils.data.Dataset):
-    """PyTorch Dataset wrapping HuggingFace tokenizer encodings and integer labels."""
-
-    def __init__(self, encodings, labels):
-        self.encodings = encodings
-        self.labels = labels
-
-    def __getitem__(self, idx):
-        item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
-        item['labels'] = torch.tensor(self.labels[idx])
-        return item
-
-    def __len__(self):
-        return len(self.labels)
+def set_seed_all(seed: int) -> None:
+    """Set deterministic seeds for Python, NumPy, and PyTorch."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 
-def compute_metrics(pred):
-    """Return accuracy and weighted F1 for use with HuggingFace Trainer."""
-    labels = pred.label_ids
-    preds = pred.predictions.argmax(-1)
+def resolve_device(device_name_map: dict) -> str:
+    """Resolve runtime compute device with CUDA > MPS > CPU preference."""
+    if torch.cuda.is_available():
+        return device_name_map["cuda"]
+    if torch.backends.mps.is_available():
+        return device_name_map["mps"]
+    return device_name_map["cpu"]
+
+
+def compute_token_metrics(eval_pred, label_list, seqeval_metric):
+    """Compute seqeval metrics from token-classification predictions."""
+    logits, labels = eval_pred
+    predictions = np.argmax(logits, axis=2)
+
+    true_predictions = []
+    true_labels = []
+    valid_token_count = 0
+
+    for pred_seq, label_seq in zip(predictions, labels):
+        pred_tags = []
+        gold_tags = []
+        for pred_id, label_id in zip(pred_seq, label_seq):
+            if label_id != -100:
+                pred_tags.append(label_list[pred_id])
+                gold_tags.append(label_list[label_id])
+                valid_token_count += 1
+        if gold_tags:
+            true_predictions.append(pred_tags)
+            true_labels.append(gold_tags)
+
+    # seqeval raises ZeroDivisionError when there are no valid labels.
+    if valid_token_count == 0 or not true_labels:
+        return {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "accuracy": 0.0,
+        }
+
+    results = seqeval_metric.compute(predictions=true_predictions, references=true_labels)
     return {
-        'accuracy': accuracy_score(labels, preds),
-        'f1':       f1_score(labels, preds, average='weighted'),
+        "precision": results["overall_precision"],
+        "recall": results["overall_recall"],
+        "f1": results["overall_f1"],
+        "accuracy": results["overall_accuracy"],
     }
-
-
-def build_label_maps(labels):
-    """
-    Build deterministic label<->id mappings from a list of string labels.
-
-    Returns:
-        label2id (dict): str -> int
-        id2label (dict): int -> str
-    """
-    unique_labels = sorted(set(labels))
-    label2id = {label: idx for idx, label in enumerate(unique_labels)}
-    id2label = {idx: label for label, idx in label2id.items()}
-    return label2id, id2label
