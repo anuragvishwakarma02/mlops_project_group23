@@ -1,63 +1,86 @@
-
-"""Run single-text inference and print a friendly JSON response."""
+"""Run NER inference and print token-level tags as JSON."""
 
 import json
 import os
-from pathlib import Path
 
 import torch
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-
-DEFAULT_MODEL = "distilbert-base-uncased-finetuned-sst-2-english"
-DEFAULT_ID2LABEL_PATH = Path(__file__).resolve().parents[1] / "id2label.json"
+from config import DEVICE_NAME, LOCAL_MODEL_DIR, MAX_LENGTH
+from utils import resolve_device
 
 
 def log(message):
-    """Print a friendly status message for inference."""
     print(f"[inference] {message}")
 
 
-def load_model():
-    model_name = os.getenv("HF_MODEL_NAME", DEFAULT_MODEL)
-    hf_token = os.getenv("HF_TOKEN") or None
-    tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, token=hf_token)
-    return model_name, tokenizer, model
+def load_model_and_tokenizer():
+    model_dir = os.getenv("HF_MODEL_DIR", LOCAL_MODEL_DIR)
+    tokenizer = AutoTokenizer.from_pretrained(model_dir)
+    model = AutoModelForTokenClassification.from_pretrained(model_dir)
+    return model_dir, tokenizer, model
 
 
-def predict(text, tokenizer, model):
-    encoded = tokenizer(text, return_tensors="pt", truncation=True, padding=True, max_length=512)
+def predict_tokens(text, tokenizer, model, device):
+    words = text.split()
+    encoded = tokenizer(
+        words,
+        is_split_into_words=True,
+        return_tensors="pt",
+        truncation=True,
+        max_length=MAX_LENGTH,
+    )
+    encoded = {k: v.to(device) for k, v in encoded.items()}
+
     with torch.no_grad():
-        logits = model(**encoded).logits
-        probs = torch.softmax(logits, dim=-1).squeeze(0)
-        pred_idx = int(torch.argmax(probs).item())
+        outputs = model(**encoded)
+        pred_ids = torch.argmax(outputs.logits, dim=-1)[0].detach().cpu().tolist()
+
+    word_ids = tokenizer(
+        words,
+        is_split_into_words=True,
+        truncation=True,
+        max_length=MAX_LENGTH,
+    ).word_ids()
 
     id2label = model.config.id2label or {}
-    if not id2label and DEFAULT_ID2LABEL_PATH.exists():
-        with open(DEFAULT_ID2LABEL_PATH, "r", encoding="utf-8") as f:
-            local_map = json.load(f)
-        id2label = {int(k): v for k, v in local_map.items()}
-    predicted_label = id2label.get(pred_idx, str(pred_idx))
 
-    return {
-        "predicted_label": predicted_label,
-        "predicted_index": pred_idx,
-        "confidence": float(probs[pred_idx].item()),
-        "model_name": model.config._name_or_path,
-    }
+    token_labels = []
+    prev_word = None
+    for token_pos, word_id in enumerate(word_ids):
+        if word_id is None or word_id == prev_word:
+            prev_word = word_id
+            continue
+
+        label_id = pred_ids[token_pos]
+        label = id2label.get(label_id, str(label_id))
+        token_labels.append({"token": words[word_id], "label": label})
+        prev_word = word_id
+
+    entities = [row for row in token_labels if row["label"] != "O"]
+    return token_labels, entities
 
 
 def main():
-    input_text = os.getenv("INPUT_TEXT")
-    if not input_text:
-        raise ValueError("INPUT_TEXT environment variable is required for inference.")
+    textset = ["Google launched a new model with 12B parameters in California"        
+               "I am from Pune",
+               "India is a country in South Asia",]
 
-    model_name, tokenizer, model = load_model()
-    log(f"Loaded model '{model_name}'. Running prediction...")
-    result = predict(input_text, tokenizer, model)
-    log("Prediction complete. Returning JSON output.")
-    print(json.dumps(result, indent=2))
+    device = resolve_device(DEVICE_NAME)
+    model_dir, tokenizer, model = load_model_and_tokenizer()
+    model = model.to(device)
+    model.eval()
+
+    log(f"Loaded model from '{model_dir}'. Running prediction...")
+    for text in textset:
+        token_labels, entities = predict_tokens(text, tokenizer, model, device)
+        result = {
+            "model_name": model.config._name_or_path,
+            "input_text": text,
+            "token_labels": token_labels,
+            "entities": entities,
+        }
+        print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":
