@@ -2,7 +2,7 @@ name: MLOps Pipeline
 
 on:
   push:
-    branches: [main,framework]
+    branches: [main,develop]
   workflow_dispatch:
     inputs:
       push_to_hub:
