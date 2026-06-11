@@ -86,7 +86,7 @@ def strip_special_chars(text):
     text = LATEX_CMD_RE.sub(" ", text)
     text = NON_ALNUM_RE.sub(" ", text)
     text = MULTISPACE_RE.sub(" ", text).strip()
-    return text.lower()
+    return text
 
 
 def clean_entities_for_ner(entities):
