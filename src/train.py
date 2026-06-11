@@ -56,6 +56,7 @@ def main():
     device = resolve_device(DEVICE_NAME)
     log(f"Using device: {device}")
 
+    # ignore_mismatched_sizes=True allows loading a pretrained model with a different classifier head size
     model = AutoModelForTokenClassification.from_pretrained(
         MODEL_NAME,
         num_labels=len(label_list),
@@ -82,13 +83,13 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
-    seqeval_metric = evaluate.load("seqeval")
+    seqeval_metric = evaluate.load("seqeval")  # Standard NER evaluation metric
 
     trainer = Trainer(
         model=model,
         args=TrainingArguments(
             **TRAINING_ARGS,
-            report_to=["wandb"] if ENABLE_WANDB else [],
+            report_to=["wandb"] if ENABLE_WANDB else [],  # Log to WandB only if enabled
             run_name=WANDB_RUN_NAME,
         ),
         train_dataset=tokenized_dataset["train"],

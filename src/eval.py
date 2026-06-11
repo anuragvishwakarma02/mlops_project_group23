@@ -6,7 +6,7 @@ import pickle
 
 import matplotlib
 
-matplotlib.use("Agg")
+matplotlib.use("Agg")  # Non-interactive backend (no display needed)
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
@@ -33,6 +33,7 @@ def log(message):
 
 
 def flatten_valid_labels(pred_ids, true_ids):
+    """Flatten batched predictions and labels, ignoring padding tokens (label == -100)."""
     flat_true = []
     flat_pred = []
     for pred_seq, true_seq in zip(pred_ids, true_ids):
@@ -85,10 +86,12 @@ def save_confusion(flat_true, flat_pred, label_list, label2id, output_dir):
     label_support = all_cm.sum(axis=1)
     o_id = label2id.get("O", None)
 
+    # Pick top-K entity labels by support, excluding the 'O' (non-entity) tag
     entity_ids = [idx for idx in all_label_ids if idx != o_id and label_support[idx] > 0]
     entity_ids = sorted(entity_ids, key=lambda idx: label_support[idx], reverse=True)
     selected_ids = entity_ids[:TOP_K_CONFUSION]
 
+    # Always include 'O' tag at the front if it exists
     if o_id is not None and label_support[o_id] > 0:
         selected_ids = [o_id] + selected_ids
 
@@ -98,6 +101,7 @@ def save_confusion(flat_true, flat_pred, label_list, label2id, output_dir):
     cm = confusion_matrix(flat_true, flat_pred, labels=selected_ids)
     selected_names = [label_list[idx] for idx in selected_ids]
 
+    # Row-normalize for the second heatmap (shows recall-like proportions)
     row_sums = cm.sum(axis=1, keepdims=True)
     cm_norm = np.divide(cm, row_sums, where=row_sums != 0)
 
@@ -170,6 +174,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL_DIR)
     data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
 
+    # report_to=[] disables default logging (WandB/TensorBoard) during eval
     trainer = Trainer(
         model=model,
         args=TrainingArguments(output_dir=EVAL_OUTPUT_DIR, report_to=[]),
@@ -189,6 +194,7 @@ def main():
             log(f"  {key:<40} {val}")
     log("=" * 70)
 
+    # Get per-token predictions and convert logits to label IDs
     pred_output = trainer.predict(tokenized_dataset[eval_split])
     pred_ids = np.argmax(pred_output.predictions, axis=2)
     true_ids = pred_output.label_ids
