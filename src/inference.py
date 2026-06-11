@@ -62,10 +62,15 @@ def predict_tokens(text, tokenizer, model, device):
 
 
 def main():
-    textset = ["Google launched a new model with 12B parameters in California"        
-               "I am from Pune",
-               "India is a country in South Asia",]
-
+    env_text = os.getenv("INPUT_TEXT", "").strip()
+    if env_text:
+        textset = [env_text]
+    else:
+        textset = [
+            "Google launched a new model with 12B parameters in California",
+            "I am from Pune",
+            "India is a country in South Asia",
+        ]
     device = resolve_device(DEVICE_NAME)
     model_dir, tokenizer, model = load_model_and_tokenizer()
     model = model.to(device)
