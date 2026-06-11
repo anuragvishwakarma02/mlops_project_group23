@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 
 import dotenv
+from utils import resolve_device
 dotenv.load_dotenv()
 
 
@@ -20,7 +21,7 @@ models={
     '1': 'elastic/distilbert-base-uncased-finetuned-conll03-english',
     '2': 'microsoft/deberta-v3-base'
 }
-MODEL_NAME = os.getenv("MODEL_NAME", models.get('0'))
+MODEL_NAME = os.getenv("MODEL_NAME", models.get('1'))
 MAX_LENGTH = int(os.getenv("MAX_LENGTH", "256"))
 
 DATASET_NAME = os.getenv("DATASET_NAME", "yongsun-yoon/open-ner-english")
@@ -30,6 +31,7 @@ DEVICE_NAME = {
     "cuda": "cuda",
     "cpu": "cpu",
 }
+DEVICE = resolve_device(DEVICE_NAME)
 
 ARTIFACTS_DIR = os.getenv("ARTIFACTS_DIR", "./artifacts")
 OUTPUT_DIR = os.getenv("OUTPUT_DIR", "./ner_results")
@@ -43,8 +45,10 @@ PROCESSED_DATA_FILE = os.getenv("PROCESSED_DATA_FILE", os.path.join(ARTIFACTS_DI
 ID2LABEL_FILE = os.getenv("ID2LABEL_FILE", os.path.join(ARTIFACTS_DIR, "id2label.json"))
 
 USE_SUBSET = _as_bool(os.getenv("USE_SUBSET", "true"), True)
-TRAIN_MAX_SAMPLES = int(os.getenv("TRAIN_MAX_SAMPLES", "5000"))
-VALIDATION_MAX_SAMPLES = int(os.getenv("VALIDATION_MAX_SAMPLES", "1000"))
+_default_train_samples = "2000" if DEVICE == "cpu" else "5000"
+_default_validation_samples = "400" if DEVICE == "cpu" else "1000"
+TRAIN_MAX_SAMPLES = int(os.getenv("TRAIN_MAX_SAMPLES", _default_train_samples))
+VALIDATION_MAX_SAMPLES = int(os.getenv("VALIDATION_MAX_SAMPLES", _default_validation_samples))
 
 MAX_ENTITY_TYPES = int(os.getenv("MAX_ENTITY_TYPES", "500"))
 RARE_ENTITY_POLICY = os.getenv("RARE_ENTITY_POLICY", "O").upper()
@@ -58,12 +62,16 @@ WANDB_RUN_NAME = f"{WANDB_RUN_NAME}-{MODEL_NAME.replace('/', '-')}-{datetime.now
 HF_TOKEN = os.getenv("HF_TOKEN")
 HF_REPO = os.getenv("HF_REPO", "anuragvishwakarma02/mlops-group23-ner")
 
+
+_default_learning_rate = "5e-5" if DEVICE == "cpu" else "3e-5"
+_default_num_train_epochs = "5" if DEVICE == "cpu" else "3"
+
 TRAINING_ARGS = dict(
     output_dir=OUTPUT_DIR,
-    learning_rate=float(os.getenv("LEARNING_RATE", "5e-5")),
+    learning_rate=float(os.getenv("LEARNING_RATE", _default_learning_rate)),
     per_device_train_batch_size=int(os.getenv("TRAIN_BATCH_SIZE", "16")),
     per_device_eval_batch_size=int(os.getenv("EVAL_BATCH_SIZE", "16")),
-    num_train_epochs=float(os.getenv("NUM_TRAIN_EPOCHS", "5")),
+    num_train_epochs=float(os.getenv("NUM_TRAIN_EPOCHS", _default_num_train_epochs)),
     weight_decay=float(os.getenv("WEIGHT_DECAY", "0.01")),
     eval_strategy="epoch",
     save_strategy="epoch",
