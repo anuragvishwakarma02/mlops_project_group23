@@ -17,7 +17,7 @@ def _as_bool(value: str, default: bool) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
-# Random seed for reproducibility
+
 SEED = int(os.getenv("SEED", "42"))
 
 # Available pretrained NER models — change '0' to '1' or '2' to switch models
@@ -59,14 +59,12 @@ TRAIN_MAX_SAMPLES = int(os.getenv("TRAIN_MAX_SAMPLES", _default_train_samples))
 VALIDATION_MAX_SAMPLES = int(os.getenv("VALIDATION_MAX_SAMPLES", _default_validation_samples))
 
 MAX_ENTITY_TYPES = int(os.getenv("MAX_ENTITY_TYPES", "500"))
-# Rare/unseen entity types are mapped to 'O' (non-entity) by default
 RARE_ENTITY_POLICY = os.getenv("RARE_ENTITY_POLICY", "O").upper()
 TOP_K_CONFUSION = int(os.getenv("TOP_K_CONFUSION", "15"))
 
 ENABLE_WANDB = _as_bool(os.getenv("ENABLE_WANDB", "true"), True)
 WANDB_PROJECT = os.getenv("WANDB_PROJECT", "mlops-group-23-project")
 WANDB_RUN_NAME = os.getenv("WANDB_RUN_NAME", f"ner-fine-tune-run-{MODEL_NAME.replace('/', '-')}")
-# Timestamp appended to avoid run name collisions
 WANDB_RUN_NAME = f"{WANDB_RUN_NAME}-{MODEL_NAME.replace('/', '-')}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 
 # HF_TOKEN should be set in .env — never hardcode it
