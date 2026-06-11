@@ -227,7 +227,8 @@ Evaluation uploads as a W&B artifact:
 ## Links
 
 - **GitHub:** [GitHub Repository](https://github.com/anuragvishwakarma02/mlops_project_group23)
-- **Kaggle Notebook:** [Kaggle](https://www.kaggle.com/code/anuragg25ait2017/mlops-group-project/edit/run/326129505)
+- **Kaggle Notebook V1:** [Kaggle](https://www.kaggle.com/code/anuragg25ait2017/mlops-group-project?scriptVersionId=326129505))
+- **Kaggle Notebook V2:** [Kaggle](https://www.kaggle.com/code/anuragg25ait2017/mlops-group-project?scriptVersionId=326275958)
 - **Hugging Face Model:** [anuragvishwakarma02/mlops-group23-ner](https://huggingface.co/anuragvishwakarma02/mlops-group23-ner)
 - **Docker Image (Public):** [Docker Hub](https://hub.docker.com/r/g25ait2017/mlops/tags)
 - **W&B Project Dashboard:** [W&B](https://api.wandb.ai/links/g25ait2017-prom-iit-rajasthan/mek3r89q)
