@@ -21,7 +21,7 @@ models={
     '1': 'elastic/distilbert-base-uncased-finetuned-conll03-english',
     '2': 'microsoft/deberta-v3-base'
 }
-MODEL_NAME = os.getenv("MODEL_NAME", models.get('1'))
+MODEL_NAME = os.getenv("MODEL_NAME", models.get('0'))
 MAX_LENGTH = int(os.getenv("MAX_LENGTH", "256"))
 
 DATASET_NAME = os.getenv("DATASET_NAME", "yongsun-yoon/open-ner-english")
