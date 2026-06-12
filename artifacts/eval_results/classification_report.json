@@ -1,0 +1,1221 @@
+{
+  "O": {
+    "precision": 0.911267595377322,
+    "recall": 0.9439960169581026,
+    "f1-score": 0.9273431276284343,
+    "support": 132562.0
+  },
+  "B-ACTION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 42.0
+  },
+  "B-ACTIVITY": {
+    "precision": 0.6666666666666666,
+    "recall": 0.020202020202020204,
+    "f1-score": 0.0392156862745098,
+    "support": 99.0
+  },
+  "B-ANATOMICAL_STRUCTURE": {
+    "precision": 0.15217391304347827,
+    "recall": 0.2545454545454545,
+    "f1-score": 0.19047619047619047,
+    "support": 55.0
+  },
+  "B-ANATOMY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 75.0
+  },
+  "B-ANIMAL": {
+    "precision": 0.1782178217821782,
+    "recall": 0.6666666666666666,
+    "f1-score": 0.28125,
+    "support": 54.0
+  },
+  "B-ATTRIBUTE": {
+    "precision": 0.234375,
+    "recall": 0.06756756756756757,
+    "f1-score": 0.1048951048951049,
+    "support": 222.0
+  },
+  "B-AWARD": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 29.0
+  },
+  "B-BIOLOGICAL_ENTITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 44.0
+  },
+  "B-BIOLOGICAL_PROCESS": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 35.0
+  },
+  "B-BODY_PART": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 45.0
+  },
+  "B-BOOK": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 25.0
+  },
+  "B-BRAND": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 47.0
+  },
+  "B-CATEGORY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 27.0
+  },
+  "B-CELL_TYPE": {
+    "precision": 0.37579617834394907,
+    "recall": 0.6629213483146067,
+    "f1-score": 0.4796747967479675,
+    "support": 89.0
+  },
+  "B-CHEMICAL": {
+    "precision": 0.2111111111111111,
+    "recall": 0.26573426573426573,
+    "f1-score": 0.23529411764705882,
+    "support": 143.0
+  },
+  "B-CHEMICAL_COMPOUND": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 58.0
+  },
+  "B-CITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 70.0
+  },
+  "B-CLASS": {
+    "precision": 0.32432432432432434,
+    "recall": 0.5052631578947369,
+    "f1-score": 0.3950617283950617,
+    "support": 95.0
+  },
+  "B-COMPANY": {
+    "precision": 0.2,
+    "recall": 0.014492753623188406,
+    "f1-score": 0.02702702702702703,
+    "support": 69.0
+  },
+  "B-COMPONENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 82.0
+  },
+  "B-COMPOUND": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 32.0
+  },
+  "B-CONCEPT": {
+    "precision": 0.29041095890410956,
+    "recall": 0.22505307855626328,
+    "f1-score": 0.2535885167464115,
+    "support": 1413.0
+  },
+  "B-CONDITION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 78.0
+  },
+  "B-COUNTRY": {
+    "precision": 0.46153846153846156,
+    "recall": 0.10619469026548672,
+    "f1-score": 0.17266187050359713,
+    "support": 113.0
+  },
+  "B-CURRENCY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 23.0
+  },
+  "B-DATA": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 63.0
+  },
+  "B-DATA_TYPE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 40.0
+  },
+  "B-DATE": {
+    "precision": 0.4296028880866426,
+    "recall": 0.5847665847665847,
+    "f1-score": 0.4953173777315297,
+    "support": 407.0
+  },
+  "B-DEVICE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 52.0
+  },
+  "B-DISEASE": {
+    "precision": 0.26609442060085836,
+    "recall": 0.3974358974358974,
+    "f1-score": 0.31876606683804626,
+    "support": 156.0
+  },
+  "B-DOCUMENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 45.0
+  },
+  "B-DRUG": {
+    "precision": 0.32,
+    "recall": 0.1509433962264151,
+    "f1-score": 0.20512820512820512,
+    "support": 53.0
+  },
+  "B-ENTITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 91.0
+  },
+  "B-ENTITY_TYPE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 106.0
+  },
+  "B-EQUIPMENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 13.0
+  },
+  "B-EVENT": {
+    "precision": 0.47305389221556887,
+    "recall": 0.3495575221238938,
+    "f1-score": 0.4020356234096692,
+    "support": 226.0
+  },
+  "B-FACILITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 34.0
+  },
+  "B-FILE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 50.0
+  },
+  "B-FOOD": {
+    "precision": 0.5566037735849056,
+    "recall": 0.6704545454545454,
+    "f1-score": 0.6082474226804123,
+    "support": 88.0
+  },
+  "B-FUNCTION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 148.0
+  },
+  "B-GENE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 64.0
+  },
+  "B-GROUP": {
+    "precision": 0.1978021978021978,
+    "recall": 0.08737864077669903,
+    "f1-score": 0.12121212121212122,
+    "support": 206.0
+  },
+  "B-JOB_TITLE": {
+    "precision": 0.8,
+    "recall": 0.045454545454545456,
+    "f1-score": 0.08602150537634409,
+    "support": 88.0
+  },
+  "B-LAW": {
+    "precision": 0.2857142857142857,
+    "recall": 0.2962962962962963,
+    "f1-score": 0.2909090909090909,
+    "support": 27.0
+  },
+  "B-LIBRARY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 47.0
+  },
+  "B-LOCATION": {
+    "precision": 0.5873629916183107,
+    "recall": 0.7218700475435816,
+    "f1-score": 0.6477070742979026,
+    "support": 1262.0
+  },
+  "B-MATERIAL": {
+    "precision": 0.358695652173913,
+    "recall": 0.4,
+    "f1-score": 0.37822349570200575,
+    "support": 165.0
+  },
+  "B-MEASUREMENT": {
+    "precision": 0.07692307692307693,
+    "recall": 0.016,
+    "f1-score": 0.026490066225165563,
+    "support": 125.0
+  },
+  "B-MEDICAL_CONDITION": {
+    "precision": 0.33634719710669075,
+    "recall": 0.36257309941520466,
+    "f1-score": 0.34896810506566606,
+    "support": 513.0
+  },
+  "B-MEDICAL_PROCEDURE": {
+    "precision": 0.24242424242424243,
+    "recall": 0.1702127659574468,
+    "f1-score": 0.2,
+    "support": 47.0
+  },
+  "B-MEDICAL_TEST": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 26.0
+  },
+  "B-MEDICAL_TREATMENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 35.0
+  },
+  "B-METHOD": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 76.0
+  },
+  "B-MISCELLANEOUS": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 28.0
+  },
+  "B-MOLECULE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 42.0
+  },
+  "B-MONEY": {
+    "precision": 0.14285714285714285,
+    "recall": 0.05263157894736842,
+    "f1-score": 0.07692307692307693,
+    "support": 38.0
+  },
+  "B-MOVIE": {
+    "precision": 0.16666666666666666,
+    "recall": 0.11764705882352941,
+    "f1-score": 0.13793103448275862,
+    "support": 17.0
+  },
+  "B-NATIONALITY": {
+    "precision": 0.551948051948052,
+    "recall": 0.6640625,
+    "f1-score": 0.6028368794326241,
+    "support": 128.0
+  },
+  "B-NUMBER": {
+    "precision": 0.8164556962025317,
+    "recall": 0.7087912087912088,
+    "f1-score": 0.7588235294117647,
+    "support": 182.0
+  },
+  "B-OBJECT": {
+    "precision": 0.20481927710843373,
+    "recall": 0.033268101761252444,
+    "f1-score": 0.05723905723905724,
+    "support": 511.0
+  },
+  "B-OCCUPATION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 42.0
+  },
+  "B-ORGANISM": {
+    "precision": 0.23076923076923078,
+    "recall": 0.2926829268292683,
+    "f1-score": 0.25806451612903225,
+    "support": 41.0
+  },
+  "B-ORGANIZATION": {
+    "precision": 0.5588607594936709,
+    "recall": 0.6398550724637682,
+    "f1-score": 0.5966216216216216,
+    "support": 1380.0
+  },
+  "B-OTHER": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 146.0
+  },
+  "B-PATENT": {
+    "precision": 0.6363636363636364,
+    "recall": 0.5384615384615384,
+    "f1-score": 0.5833333333333334,
+    "support": 13.0
+  },
+  "B-PERSON": {
+    "precision": 0.6266924564796905,
+    "recall": 0.7289088863892014,
+    "f1-score": 0.6739469578783152,
+    "support": 1778.0
+  },
+  "B-PLANT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 13.0
+  },
+  "B-PROCEDURE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 51.0
+  },
+  "B-PROCESS": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 85.0
+  },
+  "B-PRODUCT": {
+    "precision": 0.34101941747572817,
+    "recall": 0.3593350383631714,
+    "f1-score": 0.34993773349937735,
+    "support": 782.0
+  },
+  "B-PROFESSION": {
+    "precision": 0.3269230769230769,
+    "recall": 0.27419354838709675,
+    "f1-score": 0.2982456140350877,
+    "support": 62.0
+  },
+  "B-PROGRAM": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 21.0
+  },
+  "B-PROGRAMMING_LANGUAGE": {
+    "precision": 0.6818181818181818,
+    "recall": 0.2054794520547945,
+    "f1-score": 0.3157894736842105,
+    "support": 73.0
+  },
+  "B-PROPERTY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 58.0
+  },
+  "B-PROTEIN": {
+    "precision": 0.35526315789473684,
+    "recall": 0.2583732057416268,
+    "f1-score": 0.29916897506925205,
+    "support": 209.0
+  },
+  "B-PUBLICATION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 52.0
+  },
+  "B-QUANTITY": {
+    "precision": 0.3333333333333333,
+    "recall": 0.024390243902439025,
+    "f1-score": 0.045454545454545456,
+    "support": 41.0
+  },
+  "B-SERVICE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 31.0
+  },
+  "B-SOFTWARE": {
+    "precision": 0.2868217054263566,
+    "recall": 0.10220994475138122,
+    "f1-score": 0.15071283095723015,
+    "support": 362.0
+  },
+  "B-SONG": {
+    "precision": 0.5,
+    "recall": 0.13333333333333333,
+    "f1-score": 0.21052631578947367,
+    "support": 15.0
+  },
+  "B-SPECIES": {
+    "precision": 0.8333333333333334,
+    "recall": 0.3125,
+    "f1-score": 0.45454545454545453,
+    "support": 32.0
+  },
+  "B-SPORT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 31.0
+  },
+  "B-SPORTS_TEAM": {
+    "precision": 0.35454545454545455,
+    "recall": 0.8125,
+    "f1-score": 0.4936708860759494,
+    "support": 48.0
+  },
+  "B-STATE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 36.0
+  },
+  "B-STRUCTURE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 21.0
+  },
+  "B-SUBSTANCE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 82.0
+  },
+  "B-SYMPTOM": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 51.0
+  },
+  "B-SYSTEM": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 26.0
+  },
+  "B-TASK": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 18.0
+  },
+  "B-TECHNIQUE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 24.0
+  },
+  "B-TECHNOLOGY": {
+    "precision": 0.23529411764705882,
+    "recall": 0.2629757785467128,
+    "f1-score": 0.24836601307189543,
+    "support": 289.0
+  },
+  "B-TIME": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 93.0
+  },
+  "B-TITLE": {
+    "precision": 0.12,
+    "recall": 0.08035714285714286,
+    "f1-score": 0.0962566844919786,
+    "support": 112.0
+  },
+  "B-TOOL": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 64.0
+  },
+  "B-TREATMENT": {
+    "precision": 0.13414634146341464,
+    "recall": 0.1375,
+    "f1-score": 0.13580246913580246,
+    "support": 80.0
+  },
+  "B-TV_SHOW": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 32.0
+  },
+  "B-TYPE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 133.0
+  },
+  "B-URL": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 10.0
+  },
+  "B-VARIABLE": {
+    "precision": 0.46459412780656306,
+    "recall": 0.5699152542372882,
+    "f1-score": 0.5118934348239772,
+    "support": 472.0
+  },
+  "B-WEBSITE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 39.0
+  },
+  "I-ACTION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 26.0
+  },
+  "I-ACTIVITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 45.0
+  },
+  "I-ANATOMICAL_STRUCTURE": {
+    "precision": 0.15841584158415842,
+    "recall": 0.4,
+    "f1-score": 0.22695035460992907,
+    "support": 40.0
+  },
+  "I-ANATOMY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 42.0
+  },
+  "I-ANIMAL": {
+    "precision": 0.125,
+    "recall": 0.12121212121212122,
+    "f1-score": 0.12307692307692308,
+    "support": 33.0
+  },
+  "I-ATTRIBUTE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 79.0
+  },
+  "I-AWARD": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 67.0
+  },
+  "I-BIOLOGICAL_ENTITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 34.0
+  },
+  "I-BIOLOGICAL_PROCESS": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 31.0
+  },
+  "I-BODY_PART": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 27.0
+  },
+  "I-BOOK": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 79.0
+  },
+  "I-BRAND": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 8.0
+  },
+  "I-CATEGORY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 44.0
+  },
+  "I-CELL_TYPE": {
+    "precision": 0.3303964757709251,
+    "recall": 0.8241758241758241,
+    "f1-score": 0.4716981132075472,
+    "support": 91.0
+  },
+  "I-CHEMICAL": {
+    "precision": 0.17142857142857143,
+    "recall": 0.3409090909090909,
+    "f1-score": 0.22813688212927757,
+    "support": 88.0
+  },
+  "I-CHEMICAL_COMPOUND": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 68.0
+  },
+  "I-CITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 26.0
+  },
+  "I-CLASS": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 25.0
+  },
+  "I-COMPANY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 50.0
+  },
+  "I-COMPONENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 49.0
+  },
+  "I-COMPOUND": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 38.0
+  },
+  "I-CONCEPT": {
+    "precision": 0.26908752327746743,
+    "recall": 0.27949709864603484,
+    "f1-score": 0.27419354838709675,
+    "support": 1034.0
+  },
+  "I-CONDITION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 65.0
+  },
+  "I-COUNTRY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 38.0
+  },
+  "I-CURRENCY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 16.0
+  },
+  "I-DATA": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 17.0
+  },
+  "I-DATA_TYPE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5.0
+  },
+  "I-DATE": {
+    "precision": 0.4656084656084656,
+    "recall": 0.5751633986928104,
+    "f1-score": 0.5146198830409356,
+    "support": 306.0
+  },
+  "I-DEVICE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 59.0
+  },
+  "I-DISEASE": {
+    "precision": 0.2688679245283019,
+    "recall": 0.4789915966386555,
+    "f1-score": 0.34441087613293053,
+    "support": 119.0
+  },
+  "I-DOCUMENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 44.0
+  },
+  "I-DRUG": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 34.0
+  },
+  "I-ENTITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 91.0
+  },
+  "I-ENTITY_TYPE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 87.0
+  },
+  "I-EQUIPMENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 20.0
+  },
+  "I-EVENT": {
+    "precision": 0.5426008968609866,
+    "recall": 0.44,
+    "f1-score": 0.4859437751004016,
+    "support": 275.0
+  },
+  "I-FACILITY": {
+    "precision": 0.037037037037037035,
+    "recall": 0.0196078431372549,
+    "f1-score": 0.02564102564102564,
+    "support": 51.0
+  },
+  "I-FILE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 63.0
+  },
+  "I-FOOD": {
+    "precision": 0.5277777777777778,
+    "recall": 0.4523809523809524,
+    "f1-score": 0.48717948717948717,
+    "support": 42.0
+  },
+  "I-FUNCTION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 63.0
+  },
+  "I-GENE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 51.0
+  },
+  "I-GROUP": {
+    "precision": 0.5,
+    "recall": 0.010869565217391304,
+    "f1-score": 0.02127659574468085,
+    "support": 92.0
+  },
+  "I-JOB_TITLE": {
+    "precision": 0.36363636363636365,
+    "recall": 0.047058823529411764,
+    "f1-score": 0.08333333333333333,
+    "support": 85.0
+  },
+  "I-LAW": {
+    "precision": 0.36363636363636365,
+    "recall": 0.46153846153846156,
+    "f1-score": 0.4067796610169492,
+    "support": 52.0
+  },
+  "I-LIBRARY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 16.0
+  },
+  "I-LOCATION": {
+    "precision": 0.5064599483204134,
+    "recall": 0.6577181208053692,
+    "f1-score": 0.5722627737226277,
+    "support": 596.0
+  },
+  "I-MATERIAL": {
+    "precision": 0.23497267759562843,
+    "recall": 0.4215686274509804,
+    "f1-score": 0.3017543859649123,
+    "support": 102.0
+  },
+  "I-MEASUREMENT": {
+    "precision": 0.15625,
+    "recall": 0.046296296296296294,
+    "f1-score": 0.07142857142857142,
+    "support": 108.0
+  },
+  "I-MEDICAL_CONDITION": {
+    "precision": 0.30013831258644535,
+    "recall": 0.4779735682819383,
+    "f1-score": 0.36873406966864913,
+    "support": 454.0
+  },
+  "I-MEDICAL_PROCEDURE": {
+    "precision": 0.07692307692307693,
+    "recall": 0.017241379310344827,
+    "f1-score": 0.028169014084507043,
+    "support": 58.0
+  },
+  "I-MEDICAL_TEST": {
+    "precision": 0.625,
+    "recall": 0.13513513513513514,
+    "f1-score": 0.2222222222222222,
+    "support": 37.0
+  },
+  "I-MEDICAL_TREATMENT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 37.0
+  },
+  "I-METHOD": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 77.0
+  },
+  "I-MISCELLANEOUS": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 16.0
+  },
+  "I-MOLECULE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 10.0
+  },
+  "I-MONEY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 44.0
+  },
+  "I-MOVIE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 15.0
+  },
+  "I-NATIONALITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 13.0
+  },
+  "I-NUMBER": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 18.0
+  },
+  "I-OBJECT": {
+    "precision": 0.5,
+    "recall": 0.0163265306122449,
+    "f1-score": 0.03162055335968379,
+    "support": 245.0
+  },
+  "I-OCCUPATION": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 21.0
+  },
+  "I-ORGANISM": {
+    "precision": 0.4782608695652174,
+    "recall": 0.3055555555555556,
+    "f1-score": 0.3728813559322034,
+    "support": 36.0
+  },
+  "I-ORGANIZATION": {
+    "precision": 0.5906217070600632,
+    "recall": 0.6984423676012461,
+    "f1-score": 0.640022837567799,
+    "support": 1605.0
+  },
+  "I-OTHER": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 120.0
+  },
+  "I-PATENT": {
+    "precision": 0.5757575757575758,
+    "recall": 0.7037037037037037,
+    "f1-score": 0.6333333333333333,
+    "support": 81.0
+  },
+  "I-PERSON": {
+    "precision": 0.7447852760736197,
+    "recall": 0.8264125255275698,
+    "f1-score": 0.7834785414649887,
+    "support": 1469.0
+  },
+  "I-PLANT": {
+    "precision": 0.5,
+    "recall": 0.125,
+    "f1-score": 0.2,
+    "support": 8.0
+  },
+  "I-PROCEDURE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 37.0
+  },
+  "I-PROCESS": {
+    "precision": 0.375,
+    "recall": 0.08333333333333333,
+    "f1-score": 0.13636363636363635,
+    "support": 72.0
+  },
+  "I-PRODUCT": {
+    "precision": 0.33940182054616386,
+    "recall": 0.3901345291479821,
+    "f1-score": 0.36300417246175243,
+    "support": 669.0
+  },
+  "I-PROFESSION": {
+    "precision": 0.38461538461538464,
+    "recall": 0.15625,
+    "f1-score": 0.2222222222222222,
+    "support": 32.0
+  },
+  "I-PROGRAM": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 36.0
+  },
+  "I-PROGRAMMING_LANGUAGE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 2.0
+  },
+  "I-PROPERTY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 29.0
+  },
+  "I-PROTEIN": {
+    "precision": 0.3055555555555556,
+    "recall": 0.35714285714285715,
+    "f1-score": 0.32934131736526945,
+    "support": 154.0
+  },
+  "I-PUBLICATION": {
+    "precision": 0.3333333333333333,
+    "recall": 0.058333333333333334,
+    "f1-score": 0.09929078014184398,
+    "support": 120.0
+  },
+  "I-QUANTITY": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 40.0
+  },
+  "I-SERVICE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 32.0
+  },
+  "I-SOFTWARE": {
+    "precision": 0.3673469387755102,
+    "recall": 0.13953488372093023,
+    "f1-score": 0.20224719101123595,
+    "support": 129.0
+  },
+  "I-SONG": {
+    "precision": 0.32608695652173914,
+    "recall": 0.4838709677419355,
+    "f1-score": 0.38961038961038963,
+    "support": 31.0
+  },
+  "I-SPECIES": {
+    "precision": 0.4827586206896552,
+    "recall": 0.3684210526315789,
+    "f1-score": 0.417910447761194,
+    "support": 38.0
+  },
+  "I-SPORT": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 32.0
+  },
+  "I-SPORTS_TEAM": {
+    "precision": 0.35384615384615387,
+    "recall": 0.6216216216216216,
+    "f1-score": 0.45098039215686275,
+    "support": 37.0
+  },
+  "I-STATE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 5.0
+  },
+  "I-STRUCTURE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 15.0
+  },
+  "I-SUBSTANCE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 40.0
+  },
+  "I-SYMPTOM": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 20.0
+  },
+  "I-SYSTEM": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 42.0
+  },
+  "I-TASK": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 10.0
+  },
+  "I-TECHNIQUE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 26.0
+  },
+  "I-TECHNOLOGY": {
+    "precision": 0.18725099601593626,
+    "recall": 0.27011494252873564,
+    "f1-score": 0.2211764705882353,
+    "support": 174.0
+  },
+  "I-TIME": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 84.0
+  },
+  "I-TITLE": {
+    "precision": 0.1297709923664122,
+    "recall": 0.10625,
+    "f1-score": 0.11683848797250859,
+    "support": 160.0
+  },
+  "I-TOOL": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 45.0
+  },
+  "I-TREATMENT": {
+    "precision": 0.10101010101010101,
+    "recall": 0.1724137931034483,
+    "f1-score": 0.12738853503184713,
+    "support": 58.0
+  },
+  "I-TV_SHOW": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 48.0
+  },
+  "I-TYPE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 27.0
+  },
+  "I-URL": {
+    "precision": 0.5227272727272727,
+    "recall": 0.35384615384615387,
+    "f1-score": 0.42201834862385323,
+    "support": 65.0
+  },
+  "I-VARIABLE": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 33.0
+  },
+  "I-WEBSITE": {
+    "precision": 1.0,
+    "recall": 0.01694915254237288,
+    "f1-score": 0.03333333333333333,
+    "support": 59.0
+  },
+  "accuracy": 0.8485782005419372,
+  "macro avg": {
+    "precision": 0.16149452052701627,
+    "recall": 0.13808929046504612,
+    "f1-score": 0.12956457014924147,
+    "support": 159059.0
+  },
+  "weighted avg": {
+    "precision": 0.8188513386683449,
+    "recall": 0.8485782005419372,
+    "f1-score": 0.8307320292511912,
+    "support": 159059.0
+  }
+}
