@@ -72,8 +72,8 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 HF_REPO = os.getenv("HF_REPO", "anuragvishwakarma02/mlops-group23-ner")
 
 
-_default_learning_rate = "5e-5" if DEVICE == "cpu" else "3e-5"
-_default_num_train_epochs = "5" if DEVICE == "cpu" else "3"
+_default_learning_rate = "3e-5" if DEVICE == "cpu" else "3e-5"
+_default_num_train_epochs = "3" if DEVICE == "cpu" else "3"
 
 TRAINING_ARGS = dict(
     output_dir=OUTPUT_DIR,

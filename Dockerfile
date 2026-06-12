@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-ARG HF_MODEL_NAME=distilbert-base-uncased-finetuned-sst-2-english
+ARG HF_MODEL_NAME=dslim/bert-base-NER
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
