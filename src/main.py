@@ -1,4 +1,3 @@
-
 """
 main.py — End-to-end pipeline: data preparation → training → evaluation → hub push.
 
@@ -57,6 +56,7 @@ def run_train():
     print("\n" + "=" * 60)
     print("STEP 2 - Model fine-tuning")
     print("=" * 60)
+    # Ensure data step has been run before training
     if not os.path.exists(PROCESSED_DATA_FILE):
         raise FileNotFoundError(
             f"Processed data file not found: {PROCESSED_DATA_FILE}. Run data step first."
@@ -94,6 +94,7 @@ def run_push(args):
     print("\n" + "=" * 60)
     print("STEP 5 - Push to Hugging Face Hub")
     print("=" * 60)
+    # --repo must be explicitly provided; no default to avoid accidental pushes
     if not args.repo:
         raise ValueError("--repo is required when --push-to-hub is used")
     push_module.push(args.repo, args.private)
