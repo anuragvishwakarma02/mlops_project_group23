@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-ARG HF_MODEL_NAME=dslim/bert-base-NER
+ARG HF_MODEL_NAME=anuragvishwakarma02/mlops-group23-ner
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -15,7 +15,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY src ./src
 # COPY id2label.json ./id2label.json
 
-ENTRYPOINT ["python", "src/main.py"]
+ENTRYPOINT ["python", "-m"]
+CMD ["src.inference.infrence_from_hub"]
 
 # ── How to run locally ──────────────────────────────────────────────────────
 
