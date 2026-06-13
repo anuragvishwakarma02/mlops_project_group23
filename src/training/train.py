@@ -2,7 +2,7 @@
 train.py — Model loading, Trainer setup, and fine-tuning loop.
 
 Run:
-    python train.py
+    python -m src.training.train
 """
 
 
@@ -20,7 +20,7 @@ from transformers import (
     TrainingArguments,
 )
 
-from config import (
+from src.config import (
     DEVICE_NAME,
     ENABLE_WANDB,
     LOCAL_MODEL_DIR,
@@ -30,8 +30,8 @@ from config import (
     WANDB_PROJECT,
     WANDB_RUN_NAME,
 )
-from utils import compute_token_metrics, resolve_device
-from wandb_utils import init_wandb_run
+from src.utils import compute_token_metrics, resolve_device
+from src.wandb_utils import init_wandb_run
 
 
 def log(message):

@@ -8,14 +8,9 @@ on:
         required: true
         default: "Google launched a new model  with 12B parameters in California"
         type: string
-  workflow_run:
-    workflows: ["MLOps Pipeline"]
-    types:
-      - completed
 
 jobs:
   infer:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +20,6 @@ jobs:
       - run: pip install -r requirements.txt
       - env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-          INPUT_TEXT: ${{ github.event.inputs.input_text || 'Google launched a new model  with 12B parameters in California' }}
-        run: python src/inference.py
+          INPUT_TEXT: ${{ github.event.inputs.input_text }}
+        run: python -m src.inference.infrence_from_hub
 

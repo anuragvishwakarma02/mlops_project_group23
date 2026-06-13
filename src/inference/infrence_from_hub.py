@@ -1,24 +1,31 @@
-"""Run NER inference and print token-level tags as JSON."""
+"""Run NER inference from a Hugging Face Hub model and print token-level tags as JSON."""
 
 import json
 import os
+import sys
+from pathlib import Path
 
 import torch
 from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-from config import DEVICE_NAME, LOCAL_MODEL_DIR, MAX_LENGTH
-from utils import resolve_device
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.config import DEVICE_NAME, HF_REPO, HF_TOKEN, MAX_LENGTH
+from src.utils import resolve_device
 
 
 def log(message):
-    print(f"[inference] {message}")
+    print(f"[inference-hub] {message}")
 
 
 def load_model_and_tokenizer():
-    model_dir = os.getenv("HF_MODEL_DIR", LOCAL_MODEL_DIR)
-    tokenizer = AutoTokenizer.from_pretrained(model_dir)
-    model = AutoModelForTokenClassification.from_pretrained(model_dir)
-    return model_dir, tokenizer, model
+    model_id = os.getenv("HF_MODEL_ID") or os.getenv("HF_MODEL_NAME") or HF_REPO
+    token = HF_TOKEN or os.getenv("HF_TOKEN")
+    tokenizer = AutoTokenizer.from_pretrained(model_id, token=token)
+    model = AutoModelForTokenClassification.from_pretrained(model_id, token=token)
+    return model_id, tokenizer, model
 
 
 def predict_tokens(text, tokenizer, model, device):
@@ -71,12 +78,13 @@ def main():
             "I am from Pune",
             "India is a country in South Asia",
         ]
+
     device = resolve_device(DEVICE_NAME)
-    model_dir, tokenizer, model = load_model_and_tokenizer()
+    model_id, tokenizer, model = load_model_and_tokenizer()
     model = model.to(device)
     model.eval()
 
-    log(f"Loaded model from '{model_dir}'. Running prediction...")
+    log(f"Loaded model from '{model_id}'. Running prediction...")
     for text in textset:
         token_labels, entities = predict_tokens(text, tokenizer, model, device)
         result = {

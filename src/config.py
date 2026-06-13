@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 import dotenv
-from utils import resolve_device
+from src.utils import resolve_device
 
 # Load environment variables from .env file
 dotenv.load_dotenv()
@@ -63,7 +63,7 @@ RARE_ENTITY_POLICY = os.getenv("RARE_ENTITY_POLICY", "O").upper()
 TOP_K_CONFUSION = int(os.getenv("TOP_K_CONFUSION", "15"))
 
 ENABLE_WANDB = _as_bool(os.getenv("ENABLE_WANDB", "true"), True)
-WANDB_PROJECT = os.getenv("WANDB_PROJECT", "mlops-group-23-project")
+WANDB_PROJECT = os.getenv("WANDB_PROJECT", "mlops-group-23-project") #Different project name for group 23 in training run
 WANDB_RUN_NAME = os.getenv("WANDB_RUN_NAME", f"ner-fine-tune-run-{MODEL_NAME.replace('/', '-')}")
 WANDB_RUN_NAME = f"{WANDB_RUN_NAME}-{MODEL_NAME.replace('/', '-')}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 

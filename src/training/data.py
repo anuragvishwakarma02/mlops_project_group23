@@ -9,7 +9,7 @@ from collections import Counter
 from datasets import load_dataset
 from transformers import AutoTokenizer
 
-from config import (
+from src.config import (
     MODEL_NAME,
     CLEANED_DATASET_PICKLE_PATH,
     DATASET_NAME,

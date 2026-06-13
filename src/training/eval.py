@@ -14,7 +14,7 @@ import wandb
 from sklearn.metrics import classification_report, confusion_matrix
 from transformers import AutoModelForTokenClassification, AutoTokenizer, DataCollatorForTokenClassification, Trainer, TrainingArguments
 
-from config import (
+from src.config import (
     DEVICE_NAME,
     ENABLE_WANDB,
     EVAL_OUTPUT_DIR,
@@ -24,8 +24,8 @@ from config import (
     WANDB_PROJECT,
     WANDB_RUN_NAME,
 )
-from utils import resolve_device
-from wandb_utils import init_wandb_run
+from src.utils import resolve_device
+from src.wandb_utils import init_wandb_run
 
 
 def log(message):

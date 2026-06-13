@@ -3,7 +3,7 @@
 push_to_hub.py — Push the fine-tuned model and tokenizer to Hugging Face Hub.
 
 Run standalone:
-    python push_to_hub.py --repo <your-hf-username/repo-name> [--private]
+    python -m src.training.push_to_hub --repo <your-hf-username/repo-name> [--private]
 
 The HF token must be supplied via the HF_TOKEN environment variable.
 """
@@ -16,8 +16,8 @@ import os
 import wandb
 from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-from config import HF_TOKEN, LOCAL_MODEL_DIR, WANDB_PROJECT, WANDB_RUN_NAME
-from wandb_utils import init_wandb_run
+from src.config import HF_TOKEN, LOCAL_MODEL_DIR, WANDB_PROJECT, WANDB_RUN_NAME
+from src.wandb_utils import init_wandb_run
 
 
 def log(message):
