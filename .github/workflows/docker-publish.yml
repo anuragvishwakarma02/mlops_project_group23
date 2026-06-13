@@ -1,0 +1,39 @@
+name: Docker Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Debug - list repo root
+        run: ls -la
+        
+      - name: Build Docker image
+        run: docker build -t mlops .
+        
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          REPO_NAME="${{ vars.DOCKERHUB_REPO }}"
+          if [ -z "$REPO_NAME" ]; then
+            REPO_NAME="mlops"
+          fi
+
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/$REPO_NAME"
+          SHA_TAG="${GITHUB_SHA::7}"
+
+          docker tag mlops "$IMAGE:latest"
+          docker tag mlops "$IMAGE:$SHA_TAG"
+
+          docker push "$IMAGE:latest"
+          docker push "$IMAGE:$SHA_TAG"
