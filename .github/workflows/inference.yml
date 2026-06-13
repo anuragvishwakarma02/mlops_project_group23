@@ -1,6 +1,8 @@
 name: Inference
 
 on:
+  push:
+    branches: [main,develop]
   workflow_dispatch:
     inputs:
       input_text:
