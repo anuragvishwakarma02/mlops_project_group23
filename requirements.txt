@@ -1,0 +1,5 @@
+torch==2.12.0
+transformers==5.10.2
+safetensors==0.7.0
+huggingface-hub==1.18.0
+python-dotenv==1.2.2

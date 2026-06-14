@@ -1,0 +1,25 @@
+name: Inference
+
+on:
+  workflow_dispatch:
+    inputs:
+      input_text:
+        description: "Text to classify"
+        required: true
+        default: "Google launched a new model  with 12B parameters in California"
+        type: string
+
+jobs:
+  infer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          INPUT_TEXT: ${{ github.event.inputs.input_text }}
+        run: python -m src.inference.infrence_from_hub
+
